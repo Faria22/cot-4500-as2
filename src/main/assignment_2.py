@@ -1,94 +1,27 @@
-def createMantisa(s):
-    num = 0
-    for n, l in enumerate(s, 1):
-        num += int(l)*2**(-1*n)
-    return num
+from functions import importData
+from nevilles import nevilles
+from newtonian import ddt, newtonian
+from hermite import hermite
+from csplines import csplines
 
-def convertNum(s):
-    sign = int(s[0])
-    c = int(s[1:12], 2)
-    f = createMantisa(s[12:])
-    return (-1)**sign * 2**(c-1023) * (1+f)
+prob1Data = importData('prob1.input')
+prob1Result = nevilles(prob1Data[0], prob1Data[1], 3.7)
+print(prob1Result, end='\n\n')
 
-def findPoint(s):
-    try:
-        return s.index('.')
-    except:
-        return -1
+prob2Data = importData('prob2.input')
+prob2Matrix = ddt(prob2Data[0], prob2Data[1])
+prob2Result = []
+for i in range(1, 4):
+    prob2Result.append(prob2Matrix[i][i])
 
-def digitChopping(n, d):
-    pIndex = findPoint(str(n))
-    if pIndex != -1:
-        n = n*10**(-pIndex)
-        n = int(n*10**(d))
-        n = n*10**(-d+pIndex)
-        return n
+print(prob2Result, end='\n\n')
 
-def minNumTerms(prec):
-    i = 0
-    func = lambda x: x**3
-    while func(i) < prec:
-        i += 1
-    return i
-    
-def digitRounding(n, d):
-    pIndex = findPoint(str(n))
-    if pIndex != -1:
-        n = n*10**(-pIndex)
-        n = int(n*10**(d)+0.5)
-        n = n*10**(-d+pIndex)
-        return n
+prob3Result = newtonian(prob2Matrix, prob2Data[0], 7.3, 3)
+print(prob3Result, end='\n\n')
 
-def absoluteError(ext, app):
-    return abs(ext-app)
-
-def relativeError(ext, app):
-    return abs(ext-app)/ext
-
-def newtonian(val, prec):
-    i = 0
-
-    f = lambda x: x**3 + 4*x**2-10
-    d = lambda x: 3*x**2 + 8*x
-
-    while abs(f(val)/d(val)) > prec:
-        i += 1
-        val = val - f(val)/d(val)
-    return i
-
-def bisection(left, right, prec):
-    i = 0
-
-    f = lambda x: x**3 + 4*x**2-10
-
-    while abs(left-right) > prec:
-        i += 1
-        p = (left+right)/2
-        if (f(left) < 0 and f(p) > 0) or (f(left)>0 and f(p)<0):
-            right = p
-        else:
-            left = p
-    return i
-
-s = '010000000111111010111001'
-
-# Adds all the zeros
-s = s+'0'*(64-len(s))
-
-num = convertNum(s)
-print(num)
+prob4Data = importData('prob4.input')
+prob4Result = hermite(prob4Data[0], prob4Data[1], prob4Data[2])
 print()
-print(digitChopping(num, 3))
-print()
-app = digitRounding(num, 3)
-print(app)
-print()
-print(absoluteError(num, app))
-print()
-print(relativeError(num, app))
-print()
-print(minNumTerms(10**4))
-print()
-print(bisection(-4, 7, 10**(-4)))
-print()
-print(newtonian(7, 10**(-4)))
+
+prob5Data = importData('prob5.input')
+prob5Result = csplines(prob5Data[0], prob5Data[1])
