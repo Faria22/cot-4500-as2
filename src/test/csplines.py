@@ -14,15 +14,15 @@ def csplines(xP, yP):
         matrix[i][i] = 2*(h(i-1)+h(i))
         matrix[i][i+1] = h(i)
 
-    print(matrix)
+    print(matrix, end='\n\n')
 
     b = np.zeros((leng))
     for i in range(1, leng-1):
         b[i] = (3/h(i))*(yP[i+1]-yP[i])-(3/h(i-1))*(yP[i]-yP[i-1])
 
-    print(b)
+    print(b, end='\n\n')
 
     invMatrix = np.linalg.inv(matrix)
     x = invMatrix.dot(b)
 
-    print(x)
+    print(x, end='\n\n')

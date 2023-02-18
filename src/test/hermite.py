@@ -1,9 +1,9 @@
 import numpy as np
 
-np.set_printoptions(linewidth=100)
+np.set_printoptions(precision=7, suppress=True, linewidth=100)
 def hermite(xP, yP, s):
     leng = len(xP)
-    matrix = np.zeros((2*leng, 2*leng-1))
+    matrix = np.zeros((2*leng, 2*leng))
     for i in range(leng):
         ind = 2*i
         matrix[ind][0] = xP[i]
@@ -20,12 +20,7 @@ def hermite(xP, yP, s):
             if j >= len(matrix[i]) or matrix[i][j] != 0:
                 continue
 
-            den = matrix[i][0]-matrix[i-2][0]
-            if den == 0:
-                continue
-
+            den = matrix[i][0]-matrix[i-j+1][0]
             matrix[i][j] = (matrix[i][j-1]-matrix[i-1][j-1])/den
 
     print(matrix)
-    #for row in matrix:
-    #    print(row)
